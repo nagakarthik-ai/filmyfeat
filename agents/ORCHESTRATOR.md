@@ -94,8 +94,7 @@ When I assign work to an agent:
 TO: backend-agent
 TASK: Create authentication API endpoints
 CONTEXT:
-  - Read: skills/jwt-auth/SKILL.md
-  - Read: skills/fastapi-backend/SKILL.md
+  - Read: skills/BACKEND.md
   - Follow: examples/auth_router.py
 INPUTS:
   - User model from database-agent

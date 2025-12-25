@@ -1,7 +1,8 @@
 # Deployment Skill
 
-## Purpose
-Deploy FastAPI + React + PostgreSQL applications using Docker.
+> Docker + Docker Compose + GitHub Actions
+
+---
 
 ## Backend Dockerfile
 
@@ -10,7 +11,6 @@ Deploy FastAPI + React + PostgreSQL applications using Docker.
 FROM python:3.11-slim
 
 WORKDIR /app
-
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
@@ -26,6 +26,8 @@ USER appuser
 EXPOSE 8000
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
 ```
+
+---
 
 ## Frontend Dockerfile
 
@@ -44,6 +46,8 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
 ```
+
+---
 
 ## Nginx Config
 
@@ -65,6 +69,8 @@ server {
     }
 }
 ```
+
+---
 
 ## Docker Compose
 
@@ -92,8 +98,6 @@ services:
     environment:
       DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
       SECRET_KEY: ${SECRET_KEY}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
     depends_on:
       db:
         condition: service_healthy
@@ -101,10 +105,7 @@ services:
       - "8000:8000"
 
   frontend:
-    build:
-      context: ./frontend
-      args:
-        VITE_API_URL: ${VITE_API_URL:-http://localhost:8000}
+    build: ./frontend
     ports:
       - "80:80"
     depends_on:
@@ -114,27 +115,33 @@ volumes:
   postgres_data:
 ```
 
-## Environment Variables
+---
+
+## Environment File
 
 ```env
-# .env
+# .env.example
 DB_USER=postgres
 DB_PASSWORD=securepassword
 DB_NAME=appdb
-SECRET_KEY=your-secret-key
-GOOGLE_CLIENT_ID=xxx
-GOOGLE_CLIENT_SECRET=xxx
+SECRET_KEY=change-me-in-production
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 VITE_API_URL=http://localhost:8000
 ```
 
-## CI/CD (GitHub Actions)
+---
+
+## GitHub Actions CI/CD
 
 ```yaml
-# .github/workflows/deploy.yml
-name: Deploy
+# .github/workflows/ci.yml
+name: CI/CD
 
 on:
   push:
+    branches: [main]
+  pull_request:
     branches: [main]
 
 jobs:
@@ -142,32 +149,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Backend tests
+
+      - name: Backend Tests
         run: |
           cd backend
           pip install -r requirements.txt
-          pytest
-      - name: Frontend tests
+          pytest --cov=app --cov-fail-under=80
+
+      - name: Frontend Tests
         run: |
           cd frontend
-          npm ci && npm test
+          npm ci
+          npm test
 
-  deploy:
+  build:
     needs: test
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     steps:
       - uses: actions/checkout@v4
-      - name: Deploy
-        uses: appleboy/ssh-action@v1
-        with:
-          host: ${{ secrets.SERVER_HOST }}
-          username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SSH_KEY }}
-          script: |
-            cd /app
-            docker-compose pull
-            docker-compose up -d
+      - run: docker-compose build
 ```
+
+---
 
 ## Commands
 
@@ -175,20 +179,29 @@ jobs:
 # Development
 docker-compose up -d
 
-# Production build
-docker-compose -f docker-compose.prod.yml up -d
+# View logs
+docker-compose logs -f backend
 
 # Run migrations
 docker-compose exec backend alembic upgrade head
 
-# View logs
-docker-compose logs -f backend
+# Rebuild
+docker-compose build --no-cache
+
+# Stop
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
 ```
 
+---
+
 ## Best Practices
+
 - Use multi-stage Docker builds
+- Run containers as non-root user
 - Never store secrets in images
-- Run containers as non-root
-- Set up health checks
 - Use environment variables
+- Set up health checks
 - Enable HTTPS in production

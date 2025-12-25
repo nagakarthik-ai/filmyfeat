@@ -10,7 +10,7 @@
 - Create seed data
 
 ## Skills I Use
-- `skills/database-schema/SKILL.md`
+- `skills/DATABASE.md`
 
 ## Input Format
 ```yaml

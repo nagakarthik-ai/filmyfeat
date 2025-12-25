@@ -27,7 +27,6 @@ In ONE response, call Task tool multiple times with:
 
 Read these files first:
 - `agents/ORCHESTRATOR.md` (your role)
-- `skills/dev-orchestrator/SKILL.md` (coordination patterns)
 - The PRP file from $ARGUMENTS
 
 Extract from PRP:
@@ -50,7 +49,7 @@ You are DATABASE-AGENT.
 
 READ FIRST:
 - agents/database-agent.md
-- skills/database-schema/SKILL.md
+- skills/DATABASE.md
 
 PROJECT: [Name from PRP]
 
@@ -66,7 +65,7 @@ TASKS:
 6. Configure alembic/env.py to import models
 7. Generate migration: alembic revision --autogenerate -m "initial"
 
-Follow patterns from skills/database-schema/SKILL.md exactly.
+Follow patterns from skills/DATABASE.md exactly.
 
 OUTPUT: List all files created with paths.
 ```
@@ -77,8 +76,7 @@ You are BACKEND-AGENT (Foundation Phase).
 
 READ FIRST:
 - agents/backend-agent.md
-- skills/fastapi-backend/SKILL.md
-- skills/error-handling/SKILL.md
+- skills/BACKEND.md
 
 PROJECT: [Name from PRP]
 
@@ -105,9 +103,7 @@ You are FRONTEND-AGENT (Foundation Phase).
 
 READ FIRST:
 - agents/frontend-agent.md
-- skills/react-frontend/SKILL.md
-- skills/modern-ui-kit/SKILL.md
-- skills/api-integration/SKILL.md
+- skills/FRONTEND.md
 
 PROJECT: [Name from PRP]
 UI FRAMEWORK: [From PRP - Chakra UI or Tailwind]
@@ -129,7 +125,7 @@ CREATE FRONTEND FOUNDATION:
 6. Create frontend/src/App.tsx with React Router
 7. Configure UI framework (ChakraProvider or Tailwind config)
 
-IMPORTANT: Copy modern components from skills/modern-ui-kit/SKILL.md:
+IMPORTANT: Copy modern components from skills/FRONTEND.md:
 - GlassCard, GradientButton, PageWrapper, AnimatedList
 
 OUTPUT: List all files created with paths.
@@ -140,8 +136,7 @@ OUTPUT: List all files created with paths.
 You are DEVOPS-AGENT.
 
 READ FIRST:
-- agents/other-agents.md (DevOps section)
-- skills/deployment/SKILL.md
+- skills/DEPLOYMENT.md
 
 PROJECT: [Name from PRP]
 
@@ -189,9 +184,7 @@ For EACH module in PRP, launch Backend + Frontend agents together.
 You are BACKEND-AGENT for AUTH MODULE.
 
 READ FIRST:
-- skills/jwt-auth/SKILL.md
-- skills/google-oauth/SKILL.md (if OAuth in PRP)
-- skills/fastapi-backend/SKILL.md
+- skills/BACKEND.md
 
 MODELS AVAILABLE: [from Phase 1]
 
@@ -219,9 +212,7 @@ OUTPUT: All files + list of endpoints created.
 You are FRONTEND-AGENT for AUTH MODULE.
 
 READ FIRST:
-- skills/react-frontend/SKILL.md
-- skills/modern-ui-kit/SKILL.md
-- skills/api-integration/SKILL.md
+- skills/FRONTEND.md
 
 API ENDPOINTS: /auth/register, /auth/login, /auth/refresh, /auth/me
 
@@ -237,7 +228,7 @@ CREATE AUTH UI:
 9. frontend/src/components/auth/GoogleLoginButton.tsx (if OAuth)
 10. Update App.tsx with auth routes
 
-MANDATORY: Use components from modern-ui-kit for modern look.
+MANDATORY: Use components from skills/FRONTEND.md for modern look.
 
 OUTPUT: All files created.
 ```
@@ -266,7 +257,7 @@ Launch TEST-AGENT, REVIEW-AGENT, and RESEARCH-AGENT together.
 ```
 You are TEST-AGENT.
 
-READ: agents/other-agents.md, skills/testing-strategy/SKILL.md
+READ: skills/TESTING.md
 
 FILES TO TEST: [All files from Phase 1 & 2]
 
@@ -287,8 +278,6 @@ OUTPUT: All test files + coverage summary.
 ### REVIEW-AGENT Prompt
 ```
 You are REVIEW-AGENT.
-
-READ: agents/other-agents.md
 
 REVIEW all files from Phase 1 & 2.
 
@@ -315,8 +304,6 @@ OUTPUT: Review report with severity levels.
 ### RESEARCH-AGENT Prompt
 ```
 You are RESEARCH-AGENT.
-
-READ: agents/research-agent.md
 
 VALIDATE implementation against best practices:
 1. FastAPI best practices followed?

@@ -11,7 +11,6 @@ Read the product definition file: $ARGUMENTS (defaults to INITIAL.md)
 
 Read these files before generating:
 - `CLAUDE.md` (project rules)
-- `skills/dev-orchestrator/SKILL.md` (coordination patterns)
 - `agents/ORCHESTRATOR.md` (orchestrator role)
 
 ---
@@ -56,30 +55,23 @@ ACCEPTANCE_CRITERIA:
 ```yaml
 DATABASE-AGENT:
   models: [All models from all modules]
-  skills: [skills/database-schema/SKILL.md]
+  skills: [skills/DATABASE.md]
 
 BACKEND-AGENT:
   modules: [All modules needing API]
-  skills:
-    - skills/fastapi-backend/SKILL.md
-    - skills/jwt-auth/SKILL.md
-    - skills/google-oauth/SKILL.md
-    - skills/error-handling/SKILL.md
+  skills: [skills/BACKEND.md]
 
 FRONTEND-AGENT:
   modules: [All modules needing UI]
-  skills:
-    - skills/react-frontend/SKILL.md
-    - skills/modern-ui-kit/SKILL.md
-    - skills/api-integration/SKILL.md
+  skills: [skills/FRONTEND.md]
 
 DEVOPS-AGENT:
   tasks: [Docker, CI/CD, environments]
-  skills: [skills/deployment/SKILL.md]
+  skills: [skills/DEPLOYMENT.md]
 
 TEST-AGENT:
   coverage: [All modules]
-  skills: [skills/testing-strategy/SKILL.md]
+  skills: [skills/TESTING.md]
 
 REVIEW-AGENT:
   review: [Security, performance, code quality]
@@ -127,13 +119,13 @@ Create `PRPs/[product-name-kebab-case]-prp.md` with this structure:
 
 | Layer | Technology | Skill Reference |
 |-------|------------|-----------------|
-| Backend | [FastAPI + Python 3.11+] | skills/fastapi-backend/SKILL.md |
-| Frontend | [React + TypeScript + Vite] | skills/react-frontend/SKILL.md |
-| Database | [PostgreSQL + SQLAlchemy] | skills/database-schema/SKILL.md |
-| Auth | [JWT + bcrypt] | skills/jwt-auth/SKILL.md |
-| UI | [Chakra UI / Tailwind] | skills/modern-ui-kit/SKILL.md |
-| Testing | [pytest + RTL] | skills/testing-strategy/SKILL.md |
-| Deployment | [Docker + GitHub Actions] | skills/deployment/SKILL.md |
+| Backend | [FastAPI + Python 3.11+] | skills/BACKEND.md |
+| Frontend | [React + TypeScript + Vite] | skills/FRONTEND.md |
+| Database | [PostgreSQL + SQLAlchemy] | skills/DATABASE.md |
+| Auth | [JWT + bcrypt] | skills/BACKEND.md |
+| UI | [Chakra UI / Tailwind] | skills/FRONTEND.md |
+| Testing | [pytest + RTL] | skills/TESTING.md |
+| Deployment | [Docker + GitHub Actions] | skills/DEPLOYMENT.md |
 
 ---
 

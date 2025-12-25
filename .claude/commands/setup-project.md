@@ -569,16 +569,11 @@ docs: update [documentation]
 
 | Task | Skill to Read |
 |------|---------------|
-| Database models | skills/database-schema/SKILL.md |
-| API endpoints | skills/fastapi-backend/SKILL.md |
-| JWT auth | skills/jwt-auth/SKILL.md |
-| Google OAuth | skills/google-oauth/SKILL.md |
-| React components | skills/react-frontend/SKILL.md |
-| UI/Animations | skills/modern-ui-kit/SKILL.md |
-| API integration | skills/api-integration/SKILL.md |
-| Error handling | skills/error-handling/SKILL.md |
-| Testing | skills/testing-strategy/SKILL.md |
-| Deployment | skills/deployment/SKILL.md |
+| Database models | skills/DATABASE.md |
+| API + Auth | skills/BACKEND.md |
+| React + UI | skills/FRONTEND.md |
+| Testing | skills/TESTING.md |
+| Deployment | skills/DEPLOYMENT.md |
 
 ---
 

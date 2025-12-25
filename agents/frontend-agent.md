@@ -10,15 +10,13 @@
 - Add animations and styling
 
 ## Skills I Use
-- `skills/react-frontend/SKILL.md`
-- `skills/modern-ui-kit/SKILL.md` **(MANDATORY)**
-- `skills/api-integration/SKILL.md`
+- `skills/FRONTEND.md` **(MANDATORY)**
 
 ---
 
 ## MODERN UI REQUIREMENTS (MANDATORY)
 
-**READ `skills/modern-ui-kit/SKILL.md` BEFORE building ANY UI.**
+**READ `skills/FRONTEND.md` BEFORE building ANY UI.**
 
 ### Component Rules
 | Requirement | Component to Use |

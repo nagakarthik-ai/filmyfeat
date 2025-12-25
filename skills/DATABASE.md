@@ -1,7 +1,8 @@
-# Database Schema Skill
+# Database Skill
 
-## Purpose
-Design PostgreSQL database schemas using SQLAlchemy ORM with proper relationships, indexes, and migrations.
+> PostgreSQL + SQLAlchemy + Alembic
+
+---
 
 ## Database Connection
 
@@ -12,13 +13,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from app.config import settings
 
-engine = create_engine(
-    settings.DATABASE_URL,
-    pool_pre_ping=True,
-    pool_size=10,
-    max_overflow=20
-)
-
+engine = create_engine(settings.DATABASE_URL, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
@@ -30,22 +25,25 @@ def get_db():
         db.close()
 ```
 
-## Base Model with Timestamps
+---
+
+## Base Mixins
 
 ```python
 # models/base.py
-from sqlalchemy import Column, Integer, DateTime, Boolean
+from sqlalchemy import Column, DateTime, Boolean
 from sqlalchemy.sql import func
-from app.database import Base
 
 class TimestampMixin:
     created_at = Column(DateTime(timezone=True), server_default=func.now())
-    updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
 
 class SoftDeleteMixin:
     is_deleted = Column(Boolean, default=False)
     deleted_at = Column(DateTime(timezone=True), nullable=True)
 ```
+
+---
 
 ## User Model
 
@@ -63,7 +61,7 @@ class UserRole(enum.Enum):
 
 class User(Base, TimestampMixin):
     __tablename__ = "users"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     email = Column(String(255), unique=True, index=True, nullable=False)
     hashed_password = Column(String(255), nullable=True)
@@ -71,45 +69,42 @@ class User(Base, TimestampMixin):
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
     role = Column(Enum(UserRole), default=UserRole.user)
-    
-    # OAuth fields
     google_id = Column(String(255), unique=True, nullable=True, index=True)
     avatar_url = Column(String(500), nullable=True)
-    
+
     # Relationships
     posts = relationship("Post", back_populates="author", cascade="all, delete-orphan")
 ```
 
-## One-to-Many Relationship
+---
+
+## One-to-Many Example
 
 ```python
 # models/post.py
-from sqlalchemy import Column, Integer, String, Text, ForeignKey, Index, Boolean
+from sqlalchemy import Column, Integer, String, Text, ForeignKey, Boolean, Index
 from sqlalchemy.orm import relationship
 from app.database import Base
-from app.models.base import TimestampMixin, SoftDeleteMixin
+from app.models.base import TimestampMixin
 
-class Post(Base, TimestampMixin, SoftDeleteMixin):
+class Post(Base, TimestampMixin):
     __tablename__ = "posts"
-    
+
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String(200), nullable=False)
     slug = Column(String(250), unique=True, index=True)
     content = Column(Text, nullable=False)
     is_published = Column(Boolean, default=False)
-    view_count = Column(Integer, default=0)
-    
     author_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    
+
     author = relationship("User", back_populates="posts")
-    tags = relationship("Tag", secondary="post_tags", back_populates="posts")
-    
-    __table_args__ = (
-        Index('ix_posts_author_published', 'author_id', 'is_published'),
-    )
+
+    __table_args__ = (Index('ix_posts_author_published', 'author_id', 'is_published'),)
 ```
 
-## Many-to-Many Relationship
+---
+
+## Many-to-Many Example
 
 ```python
 # models/tag.py
@@ -118,37 +113,37 @@ from sqlalchemy.orm import relationship
 from app.database import Base
 
 post_tags = Table(
-    'post_tags',
-    Base.metadata,
+    'post_tags', Base.metadata,
     Column('post_id', Integer, ForeignKey('posts.id', ondelete='CASCADE'), primary_key=True),
     Column('tag_id', Integer, ForeignKey('tags.id', ondelete='CASCADE'), primary_key=True)
 )
 
 class Tag(Base):
     __tablename__ = "tags"
-    
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String(50), unique=True, nullable=False, index=True)
-    slug = Column(String(60), unique=True, nullable=False)
-    
     posts = relationship("Post", secondary=post_tags, back_populates="tags")
 ```
 
-## Alembic Migrations
+---
+
+## Alembic Commands
 
 ```bash
-# Initialize Alembic
+# Initialize
 alembic init alembic
 
 # Create migration
 alembic revision --autogenerate -m "Create users table"
 
-# Apply migration
+# Apply migrations
 alembic upgrade head
 
 # Rollback
 alembic downgrade -1
 ```
+
+---
 
 ## Query Patterns
 
@@ -156,25 +151,22 @@ alembic downgrade -1
 # Avoid N+1 with eager loading
 from sqlalchemy.orm import joinedload, selectinload
 
-def get_post_with_details(db: Session, post_id: int):
-    return db.query(Post)\
-        .options(joinedload(Post.author), selectinload(Post.tags))\
-        .filter(Post.id == post_id)\
-        .first()
+def get_post_with_author(db, post_id: int):
+    return db.query(Post).options(joinedload(Post.author)).filter(Post.id == post_id).first()
 
 # Pagination
-def get_posts_paginated(db: Session, page: int = 1, per_page: int = 10):
+def get_posts_paginated(db, page: int = 1, per_page: int = 10):
     offset = (page - 1) * per_page
-    total = db.query(func.count(Post.id)).scalar()
-    posts = db.query(Post).offset(offset).limit(per_page).all()
-    return {"items": posts, "total": total, "page": page}
+    return db.query(Post).offset(offset).limit(per_page).all()
 ```
 
+---
+
 ## Best Practices
-- Use meaningful table and column names
-- Define relationships with back_populates
-- Add indexes for frequently queried columns
-- Use ondelete="CASCADE" appropriately
+
+- Use meaningful table/column names
+- Add indexes on frequently queried columns
+- Use `ondelete="CASCADE"` for foreign keys
 - Create migrations for all schema changes
-- Use mixins for common fields
-- Avoid N+1 queries with eager loading
+- Use mixins for common fields (timestamps)
+- Avoid N+1 with eager loading

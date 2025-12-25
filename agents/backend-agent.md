@@ -10,10 +10,7 @@
 - Implement error handling
 
 ## Skills I Use
-- `skills/fastapi-backend/SKILL.md`
-- `skills/jwt-auth/SKILL.md`
-- `skills/google-oauth/SKILL.md`
-- `skills/error-handling/SKILL.md`
+- `skills/BACKEND.md`
 
 ## Input Format
 ```yaml
