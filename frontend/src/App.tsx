@@ -2,9 +2,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import './index.css';
 
-const GOOGLE_FORM_URL = 'https://forms.gle/UDF98KRQ3kVcXgrDA';
+const BASE_URL = import.meta.env.BASE_URL;
+
+const GOOGLE_FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSfJLgPGlE0Ek3fjSDuJqKTJNcy8VLCF3YLsY3URGJCC6CpzWQ/viewform?usp=header';
 
 const VIDEOS = [
+  { id: 'gDIy2HgC7W8', title: 'Featured Short Film', lang: 'All' },
   { id: 'FIz_z1wtfUE', title: 'EGO - Tamil Thriller Short Film 4K', lang: 'Tamil' },
   { id: 'ww7b8xgqyrQ', title: 'WATER | Tamil Short Film', lang: 'Tamil' },
   { id: 'CUMhD_iZ5Uo', title: 'DECISION | Tamil Short Film', lang: 'Tamil' },
@@ -54,14 +57,15 @@ function App() {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container">
           <a href="#" className="logo" onClick={() => scrollToSection('hero')}>
-            <img src="/filmy-feat-logo-new.jpeg" alt="FilmyFeat Logo" className="nav-logo-img" />
-            <span className="logo-text">Filmy <span>feat</span></span>
+            <img src={`${BASE_URL}filmy-feat-nav-logo.jpeg`} alt="FilmyFeat Logo" className="nav-logo-img" />
+            <span className="logo-text">FILMY <span>FEAT</span></span>
           </a>
 
           <ul className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
             <li><a href="#about" onClick={(e) => { e.preventDefault(); scrollToSection('about'); }}>About</a></li>
             <li><a href="#prizes" onClick={(e) => { e.preventDefault(); scrollToSection('prizes'); }}>Prizes</a></li>
-            <li><a href="#videos" onClick={(e) => { e.preventDefault(); scrollToSection('videos'); }}>Videos</a></li>
+            <li><a href="#videos" onClick={(e) => { e.preventDefault(); scrollToSection('videos'); }}>Curator's Cut</a></li>
+            <li><a href="#terms" onClick={(e) => { e.preventDefault(); scrollToSection('terms'); }}>Guidelines</a></li>
             <li><a href="#registration" onClick={(e) => { e.preventDefault(); scrollToSection('registration'); }}>Register</a></li>
             <li><a href="#contact" onClick={(e) => { e.preventDefault(); scrollToSection('contact'); }}>Contact</a></li>
           </ul>
@@ -79,7 +83,7 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="hero" style={{ backgroundImage: 'url(/hero-background.jpeg)' }}>
+      <section id="hero" className="hero" style={{ '--hero-bg': `url(${BASE_URL}hero-background.jpeg)` } as React.CSSProperties}>
         <motion.div
           className="hero-content"
           initial="hidden"
@@ -95,6 +99,9 @@ function App() {
           <motion.p className="hero-date" variants={fadeInUp}>
             Film Festival 2026
           </motion.p>
+          <motion.p className="hero-tagline" variants={fadeInUp}>
+            Crafting Frames, Creating Futures
+          </motion.p>
           <motion.div className="hero-cta" variants={fadeInUp}>
             <a
               href={GOOGLE_FORM_URL}
@@ -102,7 +109,7 @@ function App() {
               rel="noopener noreferrer"
               className="btn btn-primary"
             >
-              Register Now - FREE
+              Register Now
             </a>
             <button
               className="btn btn-secondary"
@@ -128,31 +135,34 @@ function App() {
             viewport={{ once: true, margin: "-100px" }}
             variants={staggerContainer}
           >
-            <motion.div className="about-heading" variants={fadeInUp}>
-              <span className="section-tag">Discover</span>
-              <h2 className="section-title">ABOUT FILMYFEAT</h2>
-              <div className="section-line"></div>
+            <motion.div className="about-header-left" variants={fadeInUp}>
+              <h2 className="about-section-title">ABOUT FILMYFEAT</h2>
+              <div className="about-title-line"></div>
             </motion.div>
 
-            <motion.p className="about-mission" variants={fadeInUp}>
-              Empowering emerging filmmakers. Celebrating bold cinematic voices across India.
-            </motion.p>
 
-            <motion.div className="about-body" variants={fadeInUp}>
-              <img
-                src="/filmy-feat-logo.jpeg"
-                alt="FilmyFeat - Crafting Frames, Creating Futures"
-                className="about-logo-inline"
-              />
-              <p className="about-text">
-                FilmyFeat is a Pan-India short film festival created to support and showcase emerging filmmakers and original storytelling. We provide a professional platform for short films to be screened offline, recognized through awards, and celebrated by a wider creative community.
-              </p>
-              <p className="about-text">
-                Our festival welcomes films from all Indian languages, encouraging diversity, inclusivity, and bold cinematic voices, with English subtitles ensuring accessibility for all audiences. FilmyFeat is not just about competition — it is about connection, learning, and growth.
-              </p>
-              <p className="about-text">
-                Through screenings, awards, and networking opportunities, FilmyFeat aims to inspire collaboration and empower the next generation of filmmakers, helping them take confident steps into the world of Indian cinema.
-              </p>
+            <motion.div className="about-body-wrapper" variants={fadeInUp}>
+              <div className="about-text-column">
+                <p className="about-text">
+                  FilmyFeat is a Pan-India short film festival created to support and showcase emerging filmmakers and original storytelling. We provide a professional platform for short films to be screened offline, recognized through awards, and celebrated by a wider creative community.
+                </p>
+                <p className="about-text">
+                  Our festival welcomes films from all Indian languages, encouraging diversity, inclusivity, and bold cinematic voices, with English subtitles ensuring accessibility for all audiences. FilmyFeat is not just about competition — it is about connection, learning, and growth.
+                </p>
+                <p className="about-text">
+                  Through screenings, awards, and networking opportunities, FilmyFeat aims to inspire collaboration and empower the next generation of filmmakers, helping them take confident steps into the world of Indian cinema.
+                </p>
+                <p className="about-text">
+                  FilmyFeat has been crafted to be one of the key platforms for emerging cinema and aims to herald new cinematic trends — the way films are made, the way films are recognized, and the way films connect with audiences.
+                </p>
+              </div>
+              <div className="about-logo-column">
+                <img
+                  src={`${BASE_URL}filmy-feat-about-logo.jpeg`}
+                  alt="FilmyFeat Logo"
+                  className="about-logo-side"
+                />
+              </div>
             </motion.div>
           </motion.div>
 
@@ -306,13 +316,13 @@ function App() {
           >
             <span className="section-tag">Watch</span>
             <div className="video-header-row">
-              <h2 className="section-title">VIDEOS</h2>
+              <h2 className="section-title">CURATOR'S CUT</h2>
               <a
-                href="https://youtube.com/@24FramesofAravind-dq4qn"
+                href="https://www.youtube.com/@filmyfeat-d2t"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="video-yt-link"
-                aria-label="24 Frames of Aravind YouTube Channel"
+                aria-label="FilmyFeat YouTube Channel"
               >
                 <svg viewBox="0 0 24 24" fill="#FF0000" width="32" height="32">
                   <path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
@@ -368,6 +378,103 @@ function App() {
                   <span className="video-lang-tag">{video.lang}</span>
                 </motion.a>
               ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Terms & Conditions Section */}
+      <section id="terms" className="terms-section">
+        <div className="container">
+          <motion.div
+            className="section-header"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <span className="section-tag">Read Before Submitting</span>
+            <h2 className="section-title">GUIDELINES</h2>
+            <div className="section-line"></div>
+          </motion.div>
+
+          <motion.div
+            className="terms-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>1. Eligibility</h3>
+              <ul>
+                <li>Filmmaker or director must be aged 15 years or above</li>
+                <li>Short films must be between 1 and 20 minutes (including credits)</li>
+                <li>Films may be in any Indian language or English with mandatory English subtitles</li>
+                <li>Documentaries, AI-generated films, and animated films are not accepted</li>
+              </ul>
+            </motion.div>
+
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>2. Submission & Rights</h3>
+              <ul>
+                <li>Submitter must own all rights to the film (music, SFX, VFX, etc.)</li>
+                <li>Submission cannot be withdrawn after registration</li>
+                <li>Same film must not be registered more than once</li>
+                <li>Film must not be uploaded to YouTube or any streaming platform</li>
+              </ul>
+            </motion.div>
+
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>3. Registration Fees</h3>
+              <ul>
+                <li>Free: 13 Feb - 30 Jul 2026</li>
+                <li>₹99: 31 Jul - 30 Sep 2026</li>
+                <li>₹299: 1 Oct - 31 Oct 2026</li>
+                <li>₹499: 1 Nov - 20 Nov 2026</li>
+                <li>All fees are non-refundable</li>
+              </ul>
+            </motion.div>
+
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>4. Content Guidelines</h3>
+              <ul>
+                <li>Films may be of any genre</li>
+                <li>Avoid excessive violence, alcohol/cigarette consumption, content supporting illegal activities</li>
+                <li>Must adhere to YouTube's terms of service and community guidelines</li>
+              </ul>
+            </motion.div>
+
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>5. Judging Criteria</h3>
+              <ul>
+                <li>Content Originality — storyline, screenplay, script</li>
+                <li>Production — camera work, lighting, shot composition</li>
+                <li>Post-Production — editing, transitions, pacing, flow</li>
+                <li>Image — focus, color, lighting quality</li>
+              </ul>
+            </motion.div>
+
+            <motion.div className="terms-card" variants={fadeInUp}>
+              <h3>6. Selection & Awards</h3>
+              <ul>
+                <li>Nominations announced on 1 December 2026</li>
+                <li>Final winners announced at offline ceremony in Chennai on 20 December 2026</li>
+                <li>Certificates provided to officially selected participants only</li>
+                <li>Decision of jury and committee is final</li>
+              </ul>
+            </motion.div>
+          </motion.div>
+
+          <motion.div
+            className="terms-download-section"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            <a href={`${BASE_URL}filmy-feat-terms.pdf`} download className="btn btn-primary">
+              Download Full Terms (PDF)
+            </a>
           </motion.div>
         </div>
       </section>
@@ -491,10 +598,8 @@ function App() {
             viewport={{ once: true, margin: "-100px" }}
             variants={fadeInUp}
           >
-            By registering, you agree to the FilmyFeat{' '}
-            <button className="terms-link" onClick={() => setShowTerms(true)}>
-              Terms & Conditions
-            </button>.
+            <strong>For free entry participants only:</strong><br />
+            Upload the payment screenshot section by paying zero/minimum rupees or messages. If payment screenshot is not possible, you may share Filmy Feat Film Festival posters from our social media.
           </motion.p>
         </div>
       </section>
@@ -535,7 +640,7 @@ function App() {
               <p>
                 <a href="https://mail.google.com/mail/?view=cm&fs=1&to=filmyfeatofficial@gmail.com" target="_blank" rel="noopener noreferrer">filmyfeatofficial@gmail.com</a>
               </p>
-              <p>We'll respond within 24 hours</p>
+              <p>We'll respond as early as possible</p>
             </motion.div>
 
             <motion.div className="contact-card" variants={fadeInUp}>
