@@ -54,7 +54,8 @@ function App() {
       <nav className={`navbar ${isScrolled ? 'scrolled' : ''}`}>
         <div className="container">
           <a href="#" className="logo" onClick={() => scrollToSection('hero')}>
-            Filmy <span>feat</span>
+            <img src="/filmy-feat-logo-new.jpeg" alt="FilmyFeat Logo" className="nav-logo-img" />
+            <span className="logo-text">Filmy <span>feat</span></span>
           </a>
 
           <ul className={`nav-links ${mobileMenuOpen ? 'active' : ''}`}>
@@ -78,7 +79,7 @@ function App() {
       </nav>
 
       {/* Hero Section */}
-      <section id="hero" className="hero">
+      <section id="hero" className="hero" style={{ backgroundImage: 'url(/hero-background.jpeg)' }}>
         <motion.div
           className="hero-content"
           initial="hidden"
